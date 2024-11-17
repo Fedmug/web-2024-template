@@ -149,8 +149,8 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
   position: relative;
 
   @media (max-width: 768px) {
-    grid-template-columns: 150px 1fr 150px;
-    grid-template-rows: 140px 1fr 140px;
+    grid-template-columns: 120px 1fr 140px;
+    grid-template-rows: 120px 1fr 120px;
     padding: 0.25rem;
     gap: 0.25rem;
   }
@@ -161,22 +161,35 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
   padding: 0.5rem;
   ${e=>e.position==="south"?`
         position: absolute;
-        bottom: 20px;
-        @media (max-width: 768px) {
-          bottom: 10px;
-        }
-        left: 50%;
+        bottom: 10px;
+        left: 45%;
         transform: translateX(-50%);
+        width: calc(100% - 40px);
       `:e.position==="east"?`
         grid-area: east;
+        align-self: center;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 10px 0;
         margin-top: -40px;
+        margin-right: 20px;
+        margin-left: -20px;
+        
         @media (max-width: 768px) {
+          padding: 5px 0;
           margin-top: -20px;
+          margin-right: 10px;
+          margin-left: -10px;
         }
       `:e.position==="north"?`
         grid-area: north;
+        width: calc(100% - 40px);
+        transform: translateX(-5%);
       `:e.position==="west"?`
         grid-area: west;
+        transform: translateX(-20%);
       `:""}
 `,Rx=kn.div`
   display: flex;
@@ -189,9 +202,9 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
           flex-direction: row;
           .suit-group {
             img {
-              margin-right: -40px;
+              margin-right: -55px;
               @media (max-width: 768px) {
-                margin-right: -25px;
+                margin-right: -30px;
               }
             }
             &:last-child img:last-child {
@@ -200,18 +213,24 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
           }
         `;case"east":return`
           flex-direction: column;
+          height: 100%;
+          min-height: 0;
+          justify-content: center;
+          
           .suit-group {
-            margin-bottom: -30px;
-            @media (max-width: 768px) {
-              margin-bottom: -20px;
-            }
             display: flex;
             flex-direction: row;
+            justify-content: flex-start;
+            margin-bottom: -35px;
+            
+            @media (max-width: 768px) {
+              margin-bottom: -30px;
+            }
             
             img {
-              margin-right: -40px;
+              margin-right: -55px;
               @media (max-width: 768px) {
-                margin-right: -25px;
+                margin-right: -30px;
               }
             }
             
@@ -224,17 +243,21 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
             }
           }
         `;case"south":case"north":return`
+          flex-direction: row;
+          flex-wrap: nowrap;
+          overflow-x: hidden;
           margin-top: 0;
+          
           .suit-group {
-            margin-right: 10px;
-            @media (max-width: 768px) {
-              margin-right: 5px;
-            }
+            display: flex;
+            flex-direction: row;
+            margin-right: 5px;
+            flex-shrink: 0;
             
             img {
-              margin-right: -40px;
+              margin-right: -55px;
               @media (max-width: 768px) {
-                margin-right: -25px;
+                margin-right: -35px;
               }
             }
             
@@ -253,10 +276,12 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   pointer-events: none;
+  min-width: 40px;
+  min-height: 57px;
 
   @media (max-width: 768px) {
-    width: 45px;
-    height: 65px;
+    width: clamp(40px, 5vw, 70px);
+    height: clamp(57px, 7.14vw, 100px);
   }
 `,Ax=kn.div`
   grid-area: center;
