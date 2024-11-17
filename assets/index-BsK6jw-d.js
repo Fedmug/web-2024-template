@@ -141,7 +141,7 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
     "west center east"
     ". south .";
   grid-template-columns: 250px 1fr 250px;
-  grid-template-rows: 180px 1fr 160px;
+  grid-template-rows: 160px 1fr 160px;
   gap: 0.5rem;
   padding: 0.5rem;
   background-color: #076324;
@@ -150,7 +150,7 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
 
   @media (max-width: 768px) {
     grid-template-columns: 120px 1fr 140px;
-    grid-template-rows: 120px 1fr 120px;
+    grid-template-rows: 110px 1fr 110px;
     padding: 0.25rem;
     gap: 0.25rem;
   }
@@ -161,7 +161,7 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
   padding: 0.5rem;
   ${e=>e.position==="south"?`
         position: absolute;
-        bottom: 10px;
+        bottom: 5px;
         left: 45%;
         transform: translateX(-50%);
         width: calc(100% - 40px);
@@ -181,12 +181,14 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
           padding: 5px 0;
           margin-top: -20px;
           margin-right: 10px;
-          margin-left: -10px;
+          margin-left: -30px;
         }
       `:e.position==="north"?`
         grid-area: north;
         width: calc(100% - 40px);
         transform: translateX(-5%);
+        align-self: flex-end;
+        margin-bottom: -20px;
       `:e.position==="west"?`
         grid-area: west;
         transform: translateX(-20%);
@@ -224,13 +226,13 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
             margin-bottom: -35px;
             
             @media (max-width: 768px) {
-              margin-bottom: -30px;
+              margin-bottom: -32px;
             }
             
             img {
               margin-right: -55px;
               @media (max-width: 768px) {
-                margin-right: -30px;
+                margin-right: -32px;
               }
             }
             
@@ -312,7 +314,7 @@ To suppress this warning, you need to explicitly provide the \`palette.${t}Chann
     font-size: 1.2rem;
 
     @media (max-width: 768px) {
-      font-size: 1rem;
+      font-size: 0.9rem;
       margin-bottom: 0.25rem;
     }
   }
