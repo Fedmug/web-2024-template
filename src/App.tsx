@@ -31,6 +31,13 @@ const AppContainer = styled.div`
   background-color: #076324;
   overflow: hidden;
   position: relative;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 150px 1fr 150px;
+    grid-template-rows: 140px 1fr 140px;
+    padding: 0.25rem;
+    gap: 0.25rem;
+  }
 `;
 
 const PlayerSection = styled.div<{ position: string }>`
@@ -43,6 +50,9 @@ const PlayerSection = styled.div<{ position: string }>`
       return `
         position: absolute;
         bottom: 20px;
+        @media (max-width: 768px) {
+          bottom: 10px;
+        }
         left: 50%;
         transform: translateX(-50%);
       `;
@@ -51,6 +61,9 @@ const PlayerSection = styled.div<{ position: string }>`
       return `
         grid-area: east;
         margin-top: -40px;
+        @media (max-width: 768px) {
+          margin-top: -20px;
+        }
       `;
     }
     if (props.position === "north") {
@@ -82,6 +95,9 @@ const CardDisplay = styled.div<{ position: string }>`
           .suit-group {
             img {
               margin-right: -40px;
+              @media (max-width: 768px) {
+                margin-right: -25px;
+              }
             }
             &:last-child img:last-child {
               margin-right: 0;
@@ -93,11 +109,17 @@ const CardDisplay = styled.div<{ position: string }>`
           flex-direction: column;
           .suit-group {
             margin-bottom: -30px;
+            @media (max-width: 768px) {
+              margin-bottom: -20px;
+            }
             display: flex;
             flex-direction: row;
             
             img {
               margin-right: -40px;
+              @media (max-width: 768px) {
+                margin-right: -25px;
+              }
             }
             
             &:last-child {
@@ -110,31 +132,20 @@ const CardDisplay = styled.div<{ position: string }>`
           }
         `;
       case "south":
+      case "north":
         return `
           margin-top: 0;
           .suit-group {
             margin-right: 10px;
+            @media (max-width: 768px) {
+              margin-right: 5px;
+            }
             
             img {
               margin-right: -40px;
-            }
-            
-            &:last-child {
-              margin-right: 0;
-            }
-            
-            img:last-child {
-              margin-right: 0;
-            }
-          }
-        `;
-      default:
-        return `
-          .suit-group {
-            margin-right: 10px;
-            
-            img {
-              margin-right: -40px;
+              @media (max-width: 768px) {
+                margin-right: -25px;
+              }
             }
             
             &:last-child {
@@ -156,6 +167,11 @@ const CardImage = styled.img<{ position: string }>`
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   pointer-events: none;
+
+  @media (max-width: 768px) {
+    width: 45px;
+    height: 65px;
+  }
 `;
 
 const CenterSection = styled.div`
@@ -174,6 +190,12 @@ const StyledButton = styled(Button)`
     &:hover {
       background-color: #c4a030;
     }
+
+    @media (max-width: 768px) {
+      margin: 0.5rem;
+      font-size: 0.9rem;
+      padding: 6px 16px;
+    }
   }
 `;
 
@@ -183,6 +205,11 @@ const PlayerName = styled(Typography)`
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     margin-bottom: 0.5rem;
     font-size: 1.2rem;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
   }
 `;
 
@@ -240,8 +267,9 @@ function App() {
   }, []);
 
   const sortCards = (cards: Card[]) => {
-    // Порядок мастей: ♠(S) ♥(H) ♣(C) ♦(D)
-    const suitOrder = { S: 0, H: 1, C: 2, D: 3 };
+    // Определяем тип для ключей suitOrder
+    type SuitKey = "S" | "H" | "C" | "D";
+    const suitOrder: Record<SuitKey, number> = { S: 0, H: 1, C: 2, D: 3 };
     const rankOrder: { [key: string]: number } = {
       A: 0,
       K: 1,
@@ -253,22 +281,27 @@ function App() {
       "7": 7,
     };
 
-    return [...cards].sort((a, b) => {
-      const suitA = Object.keys(suitOrder).find(
-        (key) =>
-          a.suit ===
-          (key === "S" ? "♠" : key === "H" ? "♥" : key === "C" ? "♣" : "♦")
-      );
-      const suitB = Object.keys(suitOrder).find(
-        (key) =>
-          b.suit ===
-          (key === "S" ? "♠" : key === "H" ? "♥" : key === "C" ? "♣" : "♦")
-      );
+    const getSuitKey = (suit: string): SuitKey => {
+      switch (suit) {
+        case "♠":
+          return "S";
+        case "♥":
+          return "H";
+        case "♣":
+          return "C";
+        case "♦":
+          return "D";
+        default:
+          return "S"; // fallback, не должен происходить
+      }
+    };
 
-      if (suitA && suitB) {
-        if (suitOrder[suitA] !== suitOrder[suitB]) {
-          return suitOrder[suitA] - suitOrder[suitB];
-        }
+    return [...cards].sort((a, b) => {
+      const suitA = getSuitKey(a.suit);
+      const suitB = getSuitKey(b.suit);
+
+      if (suitOrder[suitA] !== suitOrder[suitB]) {
+        return suitOrder[suitA] - suitOrder[suitB];
       }
       return rankOrder[a.rank] - rankOrder[b.rank];
     });
